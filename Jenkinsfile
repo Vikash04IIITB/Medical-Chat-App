@@ -3,10 +3,10 @@ pipeline {
 
     environment {
         SUDO_PASSWORD = credentials('vikash-sudo') // ✅ Update this to your actual Jenkins Credential ID for sudo
-        AWS_ACCESS_KEY_ID = credentials('vikash-aws-access')
-        AWS_SECRET_ACCESS_KEY = credentials('vikash-aws-secret')
-        AWS_DEFAULT_REGION = "eu-north-1"
-        S3_BUCKET_NAME = "healthcarechatbot1"
+        // AWS_ACCESS_KEY_ID = credentials('vikash-aws-access') // ✅ Commented AWS credentials
+        // AWS_SECRET_ACCESS_KEY = credentials('vikash-aws-secret') // ✅ Commented AWS credentials
+        // AWS_DEFAULT_REGION = "eu-north-1" // ✅ Commented AWS region
+        // S3_BUCKET_NAME = "healthcarechatbot1" // ✅ Commented S3 bucket name
     }
 
     stages {
@@ -34,13 +34,14 @@ pipeline {
             }
         }
 
-        stage('Upload to S3') {
-            steps {
-                sh """
-                    aws s3 cp ExtraTrees s3://${S3_BUCKET_NAME}/ExtraTrees --region ${AWS_DEFAULT_REGION}
-                """
-            }
-        }
+        // Commented out AWS upload to S3 stage
+        // stage('Upload to S3') {
+        //     steps {
+        //         sh """
+        //             aws s3 cp ExtraTrees s3://${S3_BUCKET_NAME}/ExtraTrees --region ${AWS_DEFAULT_REGION}
+        //         """
+        //     }
+        // }
 
         stage('Build Docker Frontend Image') {
             steps {
