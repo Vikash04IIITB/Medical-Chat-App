@@ -1,0 +1,16 @@
+flask
+google-generativeai
+python-dotenv
+langchain
+PyPDF2
+numpy
+pandas
+faiss-cpu
+langchain_google_genai
+scikit-learn==1.2.2
+torch
+langchain-community
+nltk
+flask_cors
+python-logstash
+python-logstash-async

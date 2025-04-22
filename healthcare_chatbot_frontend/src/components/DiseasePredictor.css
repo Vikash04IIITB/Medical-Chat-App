@@ -1,0 +1,10 @@
+.prediction-content {
+    height: 500px !important;
+    overflow: auto !important;
+    border: 2px;
+  }
+  
+  .symptoms-list {
+    max-height: 200px !important;
+    overflow-y: auto !important;
+  }

@@ -1,0 +1,106 @@
+.card {
+    height: 600px;
+    border-radius: 15px;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .msg_head {
+    color: white;
+    border-radius: 15px 15px 0 0;
+    padding: 10px;
+    background-color: #343a40;
+  }
+  
+  .user_img {
+    width: 50px;
+    height: 50px;
+  }
+  
+  .online_icon {
+    position: relative;
+    height: 15px;
+    width: 15px;
+    background-color: #4cd137;
+    border-radius: 50%;
+    display: inline-block;
+    bottom: 10px;
+    right: 0;
+    border: 1px solid white;
+  }
+  
+  .user_info {
+    margin-left: 10px;
+  }
+  
+  .msg_card_body {
+    overflow-y: auto;
+    height: calc(100% - 180px);
+    padding: 10px;
+  }
+  
+  .msg_cotainer {
+    background-color: white;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 60%;
+    margin-right: 10px;
+  }
+  
+  .msg_cotainer_send {
+    background-color: #343a40;
+    color: white;
+    padding: 10px;
+    border-radius: 10px;
+    max-width: 60%;
+    margin-left: 10px;
+  }
+  
+  .user_img_msg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .card-footer {
+    background-color: #f8f9fa;
+    border-radius: 0 0 15px 15px;
+    padding: 10px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .type_msg {
+    border: none;
+    box-shadow: none;
+    border-radius: 20px;
+    padding: 10px;
+    flex: 1; /* Make the input field take up remaining space */
+    height: 38px; /* Set a fixed height for the input field */
+  }
+  
+  .input-group-append {
+    display: flex;
+    align-items: center;
+  }
+  
+  .send_btn {
+    height: 58px; /* Match the height of the input field */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 50%; /* Keep the button circular */
+    cursor: pointer;
+    margin-left: 3px; /* Separate the send button from the input field */
+  }
+  
+  .send_btn i {
+    font-size: 16px;
+  }
+  
+  .fa-location-arrow {
+    transform: rotate(45deg); /* Rotate the arrow icon by 45 degrees */
+  }
+  

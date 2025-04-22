@@ -1,0 +1,4 @@
+[local]
+localhost ansible_user=sankalp ansible_ssh_pass=130713
+
+
