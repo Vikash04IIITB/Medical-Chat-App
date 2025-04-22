@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        SUDO_PASSWORD = credentials('vikash-sudo') // ✅ Update this to your actual Jenkins Credential ID for sudo
+        SUDO_PASSWORD = credentials('vikash-sudo') // ✅ Sudo credentials
         // AWS_ACCESS_KEY_ID = credentials('vikash-aws-access') // ✅ Commented AWS credentials
         // AWS_SECRET_ACCESS_KEY = credentials('vikash-aws-secret') // ✅ Commented AWS credentials
         // AWS_DEFAULT_REGION = "eu-north-1" // ✅ Commented AWS region
