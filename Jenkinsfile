@@ -12,7 +12,8 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Vikash04IIITB/Medical-Chat-App.git' // ✅ Your repo URL
+                git branch: 'master', url: 'https://github.com/Vikash04IIITB/Medical-Chat-App.git'
+
             }
         }
 
