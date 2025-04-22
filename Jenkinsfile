@@ -2,25 +2,26 @@ pipeline {
     agent any
 
     environment {
-        SUDO_PASSWORD = credentials('vikash-sudo') // ✅ Sudo credentials
-        // AWS_ACCESS_KEY_ID = credentials('vikash-aws-access') // ✅ Commented AWS credentials
-        // AWS_SECRET_ACCESS_KEY = credentials('vikash-aws-secret') // ✅ Commented AWS credentials
-        // AWS_DEFAULT_REGION = "eu-north-1" // ✅ Commented AWS region
-        // S3_BUCKET_NAME = "healthcarechatbot1" // ✅ Commented S3 bucket name
+        SUDO_PASSWORD = credentials('vikash-sudo')
+        // AWS_ACCESS_KEY_ID = credentials('vikash-aws-access')
+        // AWS_SECRET_ACCESS_KEY = credentials('vikash-aws-secret')
+        // AWS_DEFAULT_REGION = "eu-north-1"
+        // S3_BUCKET_NAME = "healthcarechatbot1"
     }
 
     stages {
         stage('Checkout') {
             steps {
                 git branch: 'master', url: 'https://github.com/Vikash04IIITB/Medical-Chat-App.git'
-
             }
         }
 
         stage('Test Model') {
             steps {
-                sh 'pwd'
-                sh 'python3 training/test.py'
+                sh '''
+                    source ~/.jenkins-venv/bin/activate
+                    python3 training/test.py
+                '''
             }
         }
 
@@ -35,7 +36,6 @@ pipeline {
             }
         }
 
-        // Commented out AWS upload to S3 stage
         // stage('Upload to S3') {
         //     steps {
         //         sh """
