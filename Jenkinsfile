@@ -16,6 +16,16 @@ pipeline {
             }
         }
 
+        stage('Install Python Dependencies') {
+            steps {
+                sh '''
+                    source ~/.jenkins-venv/bin/activate
+                    pip install --upgrade pip
+                    pip install -r healthcare_chatbot_backend/requirements.txt
+                '''
+            }
+        }
+
         stage('Test Model') {
             steps {
                 sh '''
@@ -88,14 +98,16 @@ pipeline {
             steps {
                 script {
                     withEnv(["SUDO_PASSWORD=${SUDO_PASSWORD}"]) {
-                        ansiblePlaybook becomeUser: null, 
-                                        colorized: true, 
-                                        disableHostKeyChecking: true, 
-                                        installation: 'Ansible', 
-                                        inventory: './ansible-deploy/inventory', 
-                                        playbook: './ansible-deploy/ansible-book.yml', 
-                                        sudoUser: null,
-                                        extraVars: [ansible_become_pass: SUDO_PASSWORD]
+                        ansiblePlaybook(
+                            becomeUser: null, 
+                            colorized: true, 
+                            disableHostKeyChecking: true, 
+                            installation: 'Ansible', 
+                            inventory: './ansible-deploy/inventory', 
+                            playbook: './ansible-deploy/ansible-book.yml', 
+                            sudoUser: null,
+                            extraVars: [ansible_become_pass: SUDO_PASSWORD]
+                        )
                     }
                 }
             }
