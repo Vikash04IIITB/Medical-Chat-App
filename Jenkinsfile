@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         SUDO_PASSWORD = credentials('vikash-sudo')
+        VENV_PATH = "${HOME}/.jenkins-venv/bin/activate"
         // AWS_ACCESS_KEY_ID = credentials('vikash-aws-access')
         // AWS_SECRET_ACCESS_KEY = credentials('vikash-aws-secret')
         // AWS_DEFAULT_REGION = "eu-north-1"
@@ -19,7 +20,7 @@ pipeline {
         stage('Install Python Dependencies') {
             steps {
                 sh '''
-                    source ~/.jenkins-venv/bin/activate
+                    source ${VENV_PATH}
                     pip install --upgrade pip
                     pip install -r healthcare_chatbot_backend/requirements.txt
                 '''
@@ -29,7 +30,8 @@ pipeline {
         stage('Test Model') {
             steps {
                 sh '''
-                    source ~/.jenkins-venv/bin/activate
+                    source ${VENV_PATH}
+                    set -e
                     python3 training/test.py
                 '''
             }
@@ -38,27 +40,20 @@ pipeline {
         stage('Train Model') {
             steps {
                 script {
-                    def trainImage = docker.build("vikash04/train-model:latest", '-f training/Dockerfile training')
+                    def trainImage = docker.build("vikash04/train-model:${env.BUILD_NUMBER}", '-f training/Dockerfile training')
                     withDockerRegistry([credentialsId: "DockerHubCred", url: ""]) {
+                        trainImage.push("latest")
                         trainImage.push("${env.BUILD_NUMBER}")
                     }
                 }
             }
         }
 
-        // stage('Upload to S3') {
-        //     steps {
-        //         sh """
-        //             aws s3 cp ExtraTrees s3://${S3_BUCKET_NAME}/ExtraTrees --region ${AWS_DEFAULT_REGION}
-        //         """
-        //     }
-        // }
-
         stage('Build Docker Frontend Image') {
             steps {
                 dir('healthcare_chatbot_frontend') {
                     script {
-                        frontendImage = docker.build("vikash04/react-app:frontend1")
+                        frontendImage = docker.build("vikash04/react-app:frontend-${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -68,7 +63,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([credentialsId: "DockerHubCred", url: ""]) {
-                        frontendImage.push()
+                        frontendImage.push("frontend-${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -78,7 +73,7 @@ pipeline {
             steps {
                 dir('healthcare_chatbot_backend') {
                     script {
-                        backendImage = docker.build("vikash04/flask-app:backend1")
+                        backendImage = docker.build("vikash04/flask-app:backend-${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -88,7 +83,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry([credentialsId: "DockerHubCred", url: ""]) {
-                        backendImage.push()
+                        backendImage.push("backend-${env.BUILD_NUMBER}")
                     }
                 }
             }
@@ -111,6 +106,31 @@ pipeline {
                     }
                 }
             }
+        }
+
+        stage('Push to GitHub') {
+            steps {
+                script {
+                    withCredentials([usernamePassword(credentialsId: 'git-credentials', usernameVariable: 'GIT_USER', passwordVariable: 'GIT_PASS')]) {
+                        sh '''
+                            git config user.name "Vikash"
+                            git config user.email "vikash.kumar@example.com"
+                            git add .
+                            git commit -m "Automated update after build ${env.BUILD_NUMBER}"
+                            git push https://${GIT_USER}:${GIT_PASS}@github.com/Vikash04IIITB/Medical-Chat-App.git master
+                        '''
+                    }
+                }
+            }
+        }
+    }
+
+    post {
+        failure {
+            echo "Build failed, check logs for details!"
+        }
+        always {
+            echo "Cleaning up..."
         }
     }
 }
